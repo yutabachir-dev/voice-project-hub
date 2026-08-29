@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as VoixRouteImport } from './routes/voix'
+import { Route as ConfirmationOrderNumberRouteImport } from './routes/confirmation.$orderNumber'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VoixRoute = VoixRouteImport.update({
+  id: '/voix',
+  path: '/voix',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfirmationOrderNumberRoute = ConfirmationOrderNumberRouteImport.update({
+  id: '/confirmation/$orderNumber',
+  path: '/confirmation/$orderNumber',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/voix': typeof VoixRoute
+  '/confirmation/$orderNumber': typeof ConfirmationOrderNumberRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/voix': typeof VoixRoute
+  '/confirmation/$orderNumber': typeof ConfirmationOrderNumberRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/voix': typeof VoixRoute
+  '/confirmation/$orderNumber': typeof ConfirmationOrderNumberRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/voix' | '/confirmation/$orderNumber'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/voix' | '/confirmation/$orderNumber'
+  id: '__root__' | '/' | '/voix' | '/confirmation/$orderNumber'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  VoixRoute: typeof VoixRoute
+  ConfirmationOrderNumberRoute: typeof ConfirmationOrderNumberRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/voix': {
+      id: '/voix'
+      path: '/voix'
+      fullPath: '/voix'
+      preLoaderRoute: typeof VoixRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/confirmation/$orderNumber': {
+      id: '/confirmation/$orderNumber'
+      path: '/confirmation/$orderNumber'
+      fullPath: '/confirmation/$orderNumber'
+      preLoaderRoute: typeof ConfirmationOrderNumberRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  VoixRoute: VoixRoute,
+  ConfirmationOrderNumberRoute: ConfirmationOrderNumberRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
